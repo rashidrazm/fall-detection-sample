@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fall Detection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #sensorData {
+      font-size: 24px;
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Fall Detection</h1>
+  <p>Accelerometer and Gyroscope Data:</p>
+  <div id="sensorData">
+    <p>Acceleration X: <span id="accelerationX">0</span></p>
+    <p>Acceleration Y: <span id="accelerationY">0</span></p>
+    <p>Acceleration Z: <span id="accelerationZ">0</span></p>
+    <p>Gyroscope Alpha: <span id="gyroAlpha">0</span></p>
+    <p>Gyroscope Beta: <span id="gyroBeta">0</span></p>
+    <p>Gyroscope Gamma: <span id="gyroGamma">0</span></p>
+  </div>
+
+  <script>
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+      DeviceMotionEvent.requestPermission()
+        .then(permissionState => {
+          if (permissionState === 'granted') {
+            window.addEventListener('devicemotion', handleMotion);
+            window.addEventListener('deviceorientation', handleOrientation);
+          } else {
+            console.error('Permission denied for sensors.');
+          }
+        })
+        .catch(console.error);
+    }
+
+    function handleMotion(event) {
+      const acceleration = event.acceleration;
+      document.getElementById('accelerationX').textContent = acceleration.x.toFixed(2);
+      document.getElementById('accelerationY').textContent = acceleration.y.toFixed(2);
+      document.getElementById('accelerationZ').textContent = acceleration.z.toFixed(2);
+    }
+
+    function handleOrientation(event) {
+      const alpha = event.alpha;
+      const beta = event.beta;
+      const gamma = event.gamma;
+
+      document.getElementById('gyroAlpha').textContent = alpha.toFixed(2);
+      document.getElementById('gyroBeta').textContent = beta.toFixed(2);
+      document.getElementById('gyroGamma').textContent = gamma.toFixed(2);
+    }
+  </script>
+</body>
+</html>
